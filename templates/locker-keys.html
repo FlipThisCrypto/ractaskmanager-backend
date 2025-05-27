@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Locker Keys - RAC Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Locker Keys</h1>
+        <div id="locker-keys-list" class="mt-4">
+            <!-- Locker Keys will be displayed here -->
+        </div>
+        <a href="/logout" class="btn btn-secondary mt-3">Logout</a>
+    </div>
+
+    <script type="module">
+        import { fetchLockerKeys } from '/static/js/main.js';
+
+        const lockerKeysList = document.getElementById('locker-keys-list');
+        fetchLockerKeys().then(keys => {
+            if (keys.length === 0) {
+                lockerKeysList.innerHTML = '<p>No locker keys available.</p>';
+            } else {
+                const table = `
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Locker Number</th>
+                                <th>Status</th>
+                                <th>Checked Out To</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${keys.map(key => `
+                                <tr>
+                                    <td>${key.locker_number || 'N/A'}</td>
+                                    <td>${key.status || 'N/A'}</td>
+                                    <td>${key.checked_out_to || 'N/A'}</td>
+                                    <td>${key.time || 'N/A'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                lockerKeysList.innerHTML = table;
+            }
+        });
+    </script>
+</body>
+</html>

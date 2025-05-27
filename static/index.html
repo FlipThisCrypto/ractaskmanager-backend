@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - RAC Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">RAC Task Manager - Login</h1>
+        <form id="login-form" class="mt-4">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <div id="login-error" class="text-danger mt-3" style="display: none;"></div>
+        </form>
+    </div>
+
+    <!-- Firebase SDK v10.12.2 -->
+    <script type="module">
+        // Import the Firebase SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { firebaseConfig } from '/js/firebase-config.js';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Handle form submission
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Sign in with Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const idToken = await userCredential.user.getIdToken();
+
+                // Send the ID token to the backend /api/session endpoint
+                const response = await fetch('/api/session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ idToken })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Redirect based on the backend's response
+                    window.location.href = result.redirect;
+                } else {
+                    throw new Error(result.error || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Firebase Authentication Error:', error); // Log the full error object
+                loginError.style.display = 'block';
+                loginError.textContent = error.message;
+            }
+        });
+    </script>
+</body>
+</html>

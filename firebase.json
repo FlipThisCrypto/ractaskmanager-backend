@@ -1,0 +1,20 @@
+{
+  "hosting": {
+    "public": "static",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "destination": "https://71c6-69-133-127-20.ngrok-free.app/api/**"
+      },
+      {
+        "source": "!/static/**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
