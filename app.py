@@ -215,6 +215,10 @@ def api_church_meetings():
 @password_change_required
 def api_moves():
     return jsonify({"message": "Moves API (to be implemented)"})
-
+    
+@app.route('/<path:path>', methods=['GET', 'POST'])
+def catch_all(path):
+    return jsonify({"message": f"Caught route: /{path}"}), 200    
+    
 if __name__ == '__main__':
     app.run(debug=True)
