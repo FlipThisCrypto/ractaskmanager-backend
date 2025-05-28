@@ -125,6 +125,10 @@ def change_password():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+    
+@app.route('/test')
+def test():
+    return jsonify({"message": "Backend is running"})
 
 # API Routes
 @app.route('/api/session', methods=['POST'])
