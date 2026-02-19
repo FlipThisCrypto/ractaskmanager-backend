@@ -1,9 +1,14 @@
-export const firebaseConfig = {
-  apiKey: "AIzaSyD7Ft-Mq4Z5envBiCkaR32B1OCMz3K2obI",
-  authDomain: "ractaskmanagement.firebaseapp.com",
-  projectId: "ractaskmanagement",
-  storageBucket: "ractaskmanagement.firebasestorage.app",
-  messagingSenderId: "46538456872",
-  appId: "1:46538456872:web:b04e8494f071f7edfbda1d",
-  measurementId: "G-XRTR938DNR"
-};
+// Firebase config loaded from server endpoint (keeps keys out of git)
+let firebaseConfig = {};
+
+async function loadFirebaseConfig() {
+  try {
+    const response = await fetch("/api/firebase-config");
+    firebaseConfig = await response.json();
+  } catch (e) {
+    console.error("Failed to load Firebase config:", e);
+  }
+  return firebaseConfig;
+}
+
+export { firebaseConfig, loadFirebaseConfig };

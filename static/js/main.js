@@ -4,6 +4,7 @@ import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/fireb
 import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
+const firebaseConfig = await loadFirebaseConfig();
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);

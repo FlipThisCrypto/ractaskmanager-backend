@@ -15,6 +15,20 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY')
 
+
+@app.route("/api/firebase-config")
+def firebase_config_endpoint():
+    """Serve Firebase client config from environment variables."""
+    return jsonify({
+        "apiKey": os.getenv("FIREBASE_API_KEY", ""),
+        "authDomain": os.getenv("FIREBASE_AUTH_DOMAIN", ""),
+        "projectId": os.getenv("FIREBASE_PROJECT_ID", ""),
+        "storageBucket": os.getenv("FIREBASE_STORAGE_BUCKET", ""),
+        "messagingSenderId": os.getenv("FIREBASE_MESSAGING_SENDER_ID", ""),
+        "appId": os.getenv("FIREBASE_APP_ID", ""),
+        "measurementId": os.getenv("FIREBASE_MEASUREMENT_ID", "")
+    })
+
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
