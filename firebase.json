@@ -6,14 +6,42 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
+    "redirects": [
       {
-        "source": "/api/**",
-        "destination": "https://71c6-69-133-127-20.ngrok-free.app/api/**"
-      },
+        "source": "/*",
+        "destination": "/index.html",
+        "type": 200
+      }
+    ],
+    "headers": [
       {
-        "source": "!/static/**",
-        "destination": "/index.html"
+        "source": "/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "key": "X-XSS-Protection",
+            "value": "1; mode=block"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://*.firebase.com https://*.firebaseapp.com; frame-ancestors 'none'"
+          }
+        ]
       }
     ]
   }
